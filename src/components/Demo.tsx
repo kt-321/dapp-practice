@@ -5,11 +5,13 @@ import {
   UserRejectedRequestError as UserRejectedRequestErrorInjected,
 } from "@web3-react/injected-connector";
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from "@web3-react/walletconnect-connector";
+import { ethers, Signer } from "ethers";
 import { useEffect, useState } from "react";
 
 import { injected, walletconnect, POLLING_INTERVAL } from "../dapp/connectors";
 import { useEagerConnect, useInactiveListener } from "../dapp/hooks";
 import logger from "../logger";
+import { ERC721K__factory } from "../types";
 import { Header } from "./Header";
 
 function getErrorMessage(error: Error) {
@@ -53,6 +55,11 @@ export const Demo = function () {
   const activating = (connection: typeof injected | typeof walletconnect) => connection === activatingConnector;
   const connected = (connection: typeof injected | typeof walletconnect) => connection === connector;
   const disabled = !triedEager || !!activatingConnector || connected(injected) || connected(walletconnect) || !!error;
+  // TODO env
+  const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+
+  const toAddress = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
+
   return (
     <>
       <Header />
@@ -93,7 +100,7 @@ export const Demo = function () {
                 </div>
                 Connect with MetaMask
               </button>
-              {(active || error) && connected(injected) && (
+              {connected(injected) && (
                 <>
                   {!!(library && account) && (
                     <button
@@ -112,6 +119,143 @@ export const Demo = function () {
                       }}
                     >
                       Sign Message
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("estimateGas mint");
+
+                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+
+                        const tokenId = 2;
+
+                        await erc721K.estimateGas
+                          .mint(account, tokenId)
+                          .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      EstimateGas Mint
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("estimateGas trasfer");
+
+                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+
+                        await erc721K.estimateGas
+                          .transfer(account, toAddress, 2)
+                          .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      EstimateGas Transfer
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("mint");
+
+                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+
+                        const tokenId = 2;
+
+                        const txRequest = await erc721K.populateTransaction.mint(account, tokenId);
+
+                        console.log("txRequest:", txRequest);
+                        console.log("txRequest.data:", txRequest.data);
+
+                        await library
+                          .getSigner(account)
+                          .sendTransaction(txRequest)
+                          .then((res) => {
+                            window.alert(`Minted!\nhash:${res.hash}`);
+                            console.log("hash:", res.hash);
+                          })
+                          .catch((err) => window.alert(`err:${err}`));
+                      }}
+                    >
+                      Mint
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("transfer");
+
+                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+
+                        const tokenId = 2;
+
+                        const txRequest = await erc721K.populateTransaction.transfer(account, toAddress, tokenId);
+
+                        await library
+                          .getSigner(account)
+                          .sendTransaction(txRequest)
+                          .then((res) => {
+                            window.alert(`Transfered!\nhash:${res.hash}`);
+                            console.log("hash:", res.hash);
+                          })
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      Transfer
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("burn");
+
+                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+
+                        const tokenId = 2;
+
+                        const txRequest = await erc721K.populateTransaction.transfer(account, toAddress, tokenId);
+
+                        await library
+                          .getSigner(account)
+                          .sendTransaction(txRequest)
+                          .then((res) => {
+                            window.alert(`Transfered!\nhash:${res.hash}`);
+                            console.log("hash:", res.hash);
+                          })
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      Transfer
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("balance");
+
+                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+
+                        await erc721K
+                          .balanceOf(account)
+                          .then((res) => window.alert(`Balance: ${res.toString()}`))
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      balance
                     </button>
                   )}
                   <button
