@@ -3,5 +3,6 @@
 /* eslint-disable */
 export { Box__factory } from "./Box__factory";
 export { BoxV2__factory } from "./BoxV2__factory";
+export { ERC721K__factory } from "./ERC721K__factory";
 export { Greeter__factory } from "./Greeter__factory";
 export { ITManToken__factory } from "./ITManToken__factory";

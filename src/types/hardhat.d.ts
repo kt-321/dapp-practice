@@ -54,11 +54,47 @@ declare module "hardhat/types/runtime" {
       name: "ContextUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContextUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC2771Context",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC2771Context__factory>;
+    getContractFactory(
+      name: "MinimalForwarder",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MinimalForwarder__factory>;
+    getContractFactory(
+      name: "ERC721",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721__factory>;
+    getContractFactory(
+      name: "IERC721Metadata",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Metadata__factory>;
+    getContractFactory(
+      name: "IERC721",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721__factory>;
+    getContractFactory(
+      name: "IERC721Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Receiver__factory>;
+    getContractFactory(
+      name: "ERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC165__factory>;
+    getContractFactory(
+      name: "IERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165__factory>;
     getContractFactory(name: "Box", signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.Box__factory>;
     getContractFactory(
       name: "BoxV2",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.BoxV2__factory>;
+    getContractFactory(
+      name: "ERC721K",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721K__factory>;
     getContractFactory(
       name: "Greeter",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -115,8 +151,21 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ContextUpgradeable>;
+    getContractAt(name: "ERC2771Context", address: string, signer?: ethers.Signer): Promise<Contracts.ERC2771Context>;
+    getContractAt(
+      name: "MinimalForwarder",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MinimalForwarder>;
+    getContractAt(name: "ERC721", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721>;
+    getContractAt(name: "IERC721Metadata", address: string, signer?: ethers.Signer): Promise<Contracts.IERC721Metadata>;
+    getContractAt(name: "IERC721", address: string, signer?: ethers.Signer): Promise<Contracts.IERC721>;
+    getContractAt(name: "IERC721Receiver", address: string, signer?: ethers.Signer): Promise<Contracts.IERC721Receiver>;
+    getContractAt(name: "ERC165", address: string, signer?: ethers.Signer): Promise<Contracts.ERC165>;
+    getContractAt(name: "IERC165", address: string, signer?: ethers.Signer): Promise<Contracts.IERC165>;
     getContractAt(name: "Box", address: string, signer?: ethers.Signer): Promise<Contracts.Box>;
     getContractAt(name: "BoxV2", address: string, signer?: ethers.Signer): Promise<Contracts.BoxV2>;
+    getContractAt(name: "ERC721K", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721K>;
     getContractAt(name: "Greeter", address: string, signer?: ethers.Signer): Promise<Contracts.Greeter>;
     getContractAt(name: "ITManToken", address: string, signer?: ethers.Signer): Promise<Contracts.ITManToken>;
 

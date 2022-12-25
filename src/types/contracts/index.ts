@@ -3,5 +3,6 @@
 /* eslint-disable */
 export type { Box } from "./Box";
 export type { BoxV2 } from "./BoxV2";
+export type { ERC721K } from "./ERC721K";
 export type { Greeter } from "./Greeter";
 export type { ITManToken } from "./ITManToken";
