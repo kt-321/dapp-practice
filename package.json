@@ -4,7 +4,9 @@
   "scripts": {
     "build": "npx hardhat compile --network localhost && next build",
     "compile": "yarn hardhat compile && yarn hardhat typechain",
-    "deploy:ERC721K:local": "npx hardhat run scripts/deploy-ERC721K.ts --network localhost",
+    "deploy:ERC721K:local": "npx hardhat run scripts/deploy_ERC721K.ts --network localhost",
+    "deploy:ERC721KV1:local": "npx hardhat run scripts/deploy_ERC721KV1.ts --network localhost",
+    "deploy:ERC721KV2:local": "npx hardhat run scripts/deploy_ERC721KV2.ts --network localhost",
     "dev": "next dev",
     "lint": "next lint",
     "lint:sol": "npx solhint 'contracts/**/*.sol'",
@@ -15,6 +17,7 @@
   "dependencies": {
     "@ethersproject/providers": "5.7.2",
     "@ethersproject/units": "5.7.0",
+    "@openzeppelin/contracts-upgradeable": "^4.8.0",
     "@tailwindcss/typography": "0.5.8",
     "@web3-react/core": "6.1.9",
     "@web3-react/injected-connector": "6.0.7",
@@ -34,8 +37,7 @@
     "@nomiclabs/hardhat-etherscan": "3.1.3",
     "@nomiclabs/hardhat-waffle": "2.0.3",
     "@openzeppelin/contracts": "4.8.0",
-    "@openzeppelin/contracts-upgradeable": "4.8.0",
-    "@openzeppelin/hardhat-upgrades": "1.22.0",
+    "@openzeppelin/hardhat-upgrades": "^1.22.0",
     "@trivago/prettier-plugin-sort-imports": "4.0.0",
     "@typechain/ethers-v5": "10.2.0",
     "@typechain/hardhat": "6.1.5",

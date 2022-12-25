@@ -27,6 +27,10 @@ contract ERC721K is ERC721, ERC2771Context{
         _transfer(from, to, tokenId);
     }
 
+    function burn(uint256 tokenId) public {
+        _burn(tokenId);
+    }
+
     // TODO Context?
     function _msgSender()
         internal

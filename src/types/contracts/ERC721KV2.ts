@@ -20,16 +20,16 @@ import type {
 
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from "../common";
 
-export interface ERC721KInterface extends utils.Interface {
+export interface ERC721KV2Interface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "hoge()": FunctionFragment;
+    "helloV2()": FunctionFragment;
+    "initialize()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "isTrustedForwarder(address)": FunctionFragment;
-    "mint(address,uint256)": FunctionFragment;
+    "mint(address)": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
@@ -48,9 +48,9 @@ export interface ERC721KInterface extends utils.Interface {
       | "balanceOf"
       | "burn"
       | "getApproved"
-      | "hoge"
+      | "helloV2"
+      | "initialize"
       | "isApprovedForAll"
-      | "isTrustedForwarder"
       | "mint"
       | "name"
       | "ownerOf"
@@ -71,13 +71,13 @@ export interface ERC721KInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "balanceOf", values: [PromiseOrValue<string>]): string;
   encodeFunctionData(functionFragment: "burn", values: [PromiseOrValue<BigNumberish>]): string;
   encodeFunctionData(functionFragment: "getApproved", values: [PromiseOrValue<BigNumberish>]): string;
-  encodeFunctionData(functionFragment: "hoge", values?: undefined): string;
+  encodeFunctionData(functionFragment: "helloV2", values?: undefined): string;
+  encodeFunctionData(functionFragment: "initialize", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(functionFragment: "isTrustedForwarder", values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(functionFragment: "mint", values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]): string;
+  encodeFunctionData(functionFragment: "mint", values: [PromiseOrValue<string>]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerOf", values: [PromiseOrValue<BigNumberish>]): string;
   encodeFunctionData(
@@ -108,9 +108,9 @@ export interface ERC721KInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getApproved", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "hoge", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "helloV2", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isApprovedForAll", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "isTrustedForwarder", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -126,11 +126,13 @@ export interface ERC721KInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "Initialized(uint8)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -152,6 +154,13 @@ export type ApprovalForAllEvent = TypedEvent<[string, string, boolean], Approval
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
+export interface InitializedEventObject {
+  version: number;
+}
+export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
+
+export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
+
 export interface TransferEventObject {
   from: string;
   to: string;
@@ -161,12 +170,12 @@ export type TransferEvent = TypedEvent<[string, string, BigNumber], TransferEven
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface ERC721K extends BaseContract {
+export interface ERC721KV2 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ERC721KInterface;
+  interface: ERC721KV2Interface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -199,7 +208,9 @@ export interface ERC721K extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[string]>;
 
-    hoge(overrides?: CallOverrides): Promise<[string]>;
+    helloV2(overrides?: CallOverrides): Promise<[string]>;
+
+    initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -207,11 +218,8 @@ export interface ERC721K extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    isTrustedForwarder(forwarder: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[boolean]>;
-
     mint(
       to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -276,7 +284,9 @@ export interface ERC721K extends BaseContract {
 
   getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>;
 
-  hoge(overrides?: CallOverrides): Promise<string>;
+  helloV2(overrides?: CallOverrides): Promise<string>;
+
+  initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
@@ -284,11 +294,8 @@ export interface ERC721K extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  isTrustedForwarder(forwarder: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
-
   mint(
     to: PromiseOrValue<string>,
-    tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -350,7 +357,9 @@ export interface ERC721K extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>;
 
-    hoge(overrides?: CallOverrides): Promise<string>;
+    helloV2(overrides?: CallOverrides): Promise<string>;
+
+    initialize(overrides?: CallOverrides): Promise<void>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -358,9 +367,7 @@ export interface ERC721K extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    isTrustedForwarder(forwarder: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
-
-    mint(to: PromiseOrValue<string>, tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<void>;
+    mint(to: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -431,6 +438,9 @@ export interface ERC721K extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
+    "Initialized(uint8)"(version?: null): InitializedEventFilter;
+    Initialized(version?: null): InitializedEventFilter;
+
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
@@ -459,7 +469,9 @@ export interface ERC721K extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
 
-    hoge(overrides?: CallOverrides): Promise<BigNumber>;
+    helloV2(overrides?: CallOverrides): Promise<BigNumber>;
+
+    initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -467,13 +479,7 @@ export interface ERC721K extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isTrustedForwarder(forwarder: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
-
-    mint(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    mint(to: PromiseOrValue<string>, overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -537,7 +543,9 @@ export interface ERC721K extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    hoge(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    helloV2(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -545,11 +553,8 @@ export interface ERC721K extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isTrustedForwarder(forwarder: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     mint(
       to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

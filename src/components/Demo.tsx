@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { injected, walletconnect, POLLING_INTERVAL } from "../dapp/connectors";
 import { useEagerConnect, useInactiveListener } from "../dapp/hooks";
 import logger from "../logger";
-import { ERC721K__factory } from "../types";
+import { ERC721KV2__factory } from "../types";
 import { Header } from "./Header";
 
 function getErrorMessage(error: Error) {
@@ -56,8 +56,10 @@ export const Demo = function () {
   const connected = (connection: typeof injected | typeof walletconnect) => connection === connector;
   const disabled = !triedEager || !!activatingConnector || connected(injected) || connected(walletconnect) || !!error;
   // TODO env
+  // an address which was got when deployed V1
   const address = "";
   const toAddress = "";
+  const tokenId = 1;
 
   return (
     <>
@@ -127,12 +129,10 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("estimateGas mint");
 
-                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        const tokenId = 2;
-
-                        await erc721K.estimateGas
-                          .mint(account, tokenId)
+                        await erc721KV1.estimateGas
+                          .mint(account)
                           .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
                           .catch((err) => console.log("err:", err));
                       }}
@@ -147,10 +147,10 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("estimateGas trasfer");
 
-                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        await erc721K.estimateGas
-                          .transfer(account, toAddress, 2)
+                        await erc721KV1.estimateGas
+                          .transfer(account, toAddress, tokenId)
                           .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
                           .catch((err) => console.log("err:", err));
                       }}
@@ -165,11 +165,9 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("mint");
 
-                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        const tokenId = 2;
-
-                        const txRequest = await erc721K.populateTransaction.mint(account, tokenId);
+                        const txRequest = await erc721KV1.populateTransaction.mint(account);
 
                         console.log("txRequest:", txRequest);
                         console.log("txRequest.data:", txRequest.data);
@@ -194,11 +192,9 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("transfer");
 
-                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        const tokenId = 2;
-
-                        const txRequest = await erc721K.populateTransaction.transfer(account, toAddress, tokenId);
+                        const txRequest = await erc721KV1.populateTransaction.transfer(account, toAddress, tokenId);
 
                         await library
                           .getSigner(account)
@@ -220,20 +216,18 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("burn");
 
-                        // const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        // const tokenId = 2;
+                        const txRequest = await erc721KV1.populateTransaction.burn(tokenId);
 
-                        // // const txRequest = await erc721K.populateTransaction.transfer(account, toAddress, tokenId);
-
-                        // // await library
-                        // //   .getSigner(account)
-                        // //   .sendTransaction(txRequest)
-                        // //   .then((res) => {
-                        // //     window.alert(`Transfered!\nhash:${res.hash}`);
-                        // //     console.log("hash:", res.hash);
-                        // //   })
-                        // //   .catch((err) => console.log("err:", err));
+                        await library
+                          .getSigner(account)
+                          .sendTransaction(txRequest)
+                          .then((res) => {
+                            window.alert(`Burned!\nhash:${res.hash}`);
+                            console.log("hash:", res.hash);
+                          })
+                          .catch((err) => console.log("err:", err));
                       }}
                     >
                       Burn
@@ -246,15 +240,36 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("balance");
 
-                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        await erc721K
+                        await erc721KV1
                           .balanceOf(account)
                           .then((res) => window.alert(`Balance: ${res.toString()}`))
                           .catch((err) => console.log("err:", err));
                       }}
                     >
                       balance
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("helloV2");
+
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
+
+                        await erc721KV1
+                          .helloV2()
+                          .then((res) => {
+                            window.alert(`success:${res}`);
+                            console.log("res:", res);
+                          })
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      helloV2
                     </button>
                   )}
                   <button
