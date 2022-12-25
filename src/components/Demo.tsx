@@ -56,9 +56,8 @@ export const Demo = function () {
   const connected = (connection: typeof injected | typeof walletconnect) => connection === connector;
   const disabled = !triedEager || !!activatingConnector || connected(injected) || connected(walletconnect) || !!error;
   // TODO env
-  const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-
-  const toAddress = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
+  const address = "";
+  const toAddress = "";
 
   return (
     <>
@@ -221,23 +220,23 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("burn");
 
-                        const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
+                        // const erc721K = ERC721K__factory.connect(address, library.getSigner(account));
 
-                        const tokenId = 2;
+                        // const tokenId = 2;
 
-                        const txRequest = await erc721K.populateTransaction.transfer(account, toAddress, tokenId);
+                        // // const txRequest = await erc721K.populateTransaction.transfer(account, toAddress, tokenId);
 
-                        await library
-                          .getSigner(account)
-                          .sendTransaction(txRequest)
-                          .then((res) => {
-                            window.alert(`Transfered!\nhash:${res.hash}`);
-                            console.log("hash:", res.hash);
-                          })
-                          .catch((err) => console.log("err:", err));
+                        // // await library
+                        // //   .getSigner(account)
+                        // //   .sendTransaction(txRequest)
+                        // //   .then((res) => {
+                        // //     window.alert(`Transfered!\nhash:${res.hash}`);
+                        // //     console.log("hash:", res.hash);
+                        // //   })
+                        // //   .catch((err) => console.log("err:", err));
                       }}
                     >
-                      Transfer
+                      Burn
                     </button>
                   )}
                   {!!(library && account) && (
