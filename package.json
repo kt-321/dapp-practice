@@ -1,7 +1,6 @@
 {
   "name": "dapp-starter",
   "version": "0.0.1",
-  "type": "module",
   "scripts": {
     "build": "npx hardhat compile --network localhost && next build",
     "compile": "yarn hardhat compile && yarn hardhat typechain",
