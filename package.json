@@ -10,6 +10,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "lint:sol": "npx solhint 'contracts/**/*.sol'",
+    "merkle": "npx node merkle_tree.mjs",
     "prepare": "husky install",
     "start": "next start",
     "test": "mocha --exit --recursive"
