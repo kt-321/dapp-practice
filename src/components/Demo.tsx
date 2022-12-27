@@ -5,9 +5,12 @@ import {
   UserRejectedRequestError as UserRejectedRequestErrorInjected,
 } from "@web3-react/injected-connector";
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from "@web3-react/walletconnect-connector";
-import { ethers, Signer } from "ethers";
+import { ethers, Signer, PayableOverrides } from "ethers";
+import { keccak256 } from "keccak256";
+import { MerkleTree } from "merkletreejs";
 import { useEffect, useState } from "react";
 
+import { allowlistAddresses } from "../../allowlist.mjs";
 import { injected, walletconnect, POLLING_INTERVAL } from "../dapp/connectors";
 import { useEagerConnect, useInactiveListener } from "../dapp/hooks";
 import logger from "../logger";
@@ -57,9 +60,11 @@ export const Demo = function () {
   const disabled = !triedEager || !!activatingConnector || connected(injected) || connected(walletconnect) || !!error;
   // TODO env
   // an address which was got when deployed V1
-  const address = "";
+  const address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
   const toAddress = "";
   const tokenId = 1;
+  // let cost = 0;
+  // let gasLimit = 285000;
 
   return (
     <>
@@ -129,12 +134,12 @@ export const Demo = function () {
                       onClick={async () => {
                         console.log("estimateGas mint");
 
-                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
+                        // const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        await erc721KV1.estimateGas
-                          .mint(account)
-                          .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
-                          .catch((err) => console.log("err:", err));
+                        // await erc721KV1.estimateGas
+                        //   .mint(3, )
+                        //   .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
+                        //   .catch((err) => console.log("err:", err));
                       }}
                     >
                       EstimateGas Mint
@@ -167,7 +172,51 @@ export const Demo = function () {
 
                         const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        const txRequest = await erc721KV1.populateTransaction.mint(account);
+                        // TODO 調整
+                        const cost = 3;
+                        // const  gasLimit = 285000;
+                        let allowlistMaxMintAmount;
+
+                        const nameMap = allowlistAddresses.map((list) => list[0]);
+                        const leafNodes = allowlistAddresses.map((addr) =>
+                          ethers.utils.solidityKeccak256(["address", "uint256"], [addr[0], addr[1]])
+                        );
+
+                        const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+
+                        const addressId = nameMap.indexOf(account);
+                        const claimingAddress = ethers.utils.solidityKeccak256(
+                          ["address", "uint256"],
+                          [allowlistAddresses[0][0], allowlistAddresses[0][1]]
+                        );
+                        const hexProof = merkleTree.getHexProof(claimingAddress);
+
+                        console.log("hexProof:", hexProof);
+                        console.log("addressId:", addressId);
+                        console.log("claimingAddress:", claimingAddress);
+
+                        if (addressId == -1) {
+                          allowlistMaxMintAmount = 0;
+                          const claimingAddress = ethers.utils.solidityKeccak256(
+                            ["address", "uint256"],
+                            [allowlistAddresses[0][0], allowlistAddresses[0][1]]
+                          );
+                          const hexProof = merkleTree.getHexProof(claimingAddress);
+                          console.log("hexProof:", hexProof);
+                        } else {
+                          allowlistMaxMintAmount = allowlistAddresses[addressId][1];
+                          const claimingAddress = ethers.utils.solidityKeccak256(
+                            ["address", "uint256"],
+                            [allowlistAddresses[addressId][0], allowlistAddresses[addressId][1]]
+                          );
+                          const hexProof = merkleTree.getHexProof(claimingAddress);
+                          console.log("hexProof:", hexProof);
+                        }
+
+                        const p: PayableOverrides = {
+                          value: cost,
+                        };
+                        const txRequest = await erc721KV1.populateTransaction.mint(allowlistMaxMintAmount, hexProof, p);
 
                         console.log("txRequest:", txRequest);
                         console.log("txRequest.data:", txRequest.data);
@@ -176,10 +225,13 @@ export const Demo = function () {
                           .getSigner(account)
                           .sendTransaction(txRequest)
                           .then((res) => {
-                            window.alert(`Minted!\nhash:${res.hash}`);
+                            window.alert("Minted!");
                             console.log("hash:", res.hash);
                           })
-                          .catch((err) => window.alert(`err:${err}`));
+                          .catch((err) => {
+                            window.alert(`err:${err}`);
+                            console.log("err:", err);
+                          });
                       }}
                     >
                       Mint
@@ -249,6 +301,48 @@ export const Demo = function () {
                       }}
                     >
                       balance
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("SetMerkleRoot");
+
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
+
+                        await erc721KV1
+                          .setMerkleRoot("0x3d1303368d48e6b465df9a7ef8d1557c71b4f173ba62f142e8ceb522fe3c63b2")
+                          .then((res) => {
+                            window.alert(`success:${res}`);
+                            console.log("res:", res);
+                          })
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      SetMerkleRoot
+                    </button>
+                  )}
+                  {!!(library && account) && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        console.log("setOnlyAllowlisted");
+
+                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
+
+                        await erc721KV1
+                          .setOnlyAllowlisted(true)
+                          .then((res) => {
+                            window.alert(`success:${res}`);
+                            console.log("res:", res);
+                          })
+                          .catch((err) => console.log("err:", err));
+                      }}
+                    >
+                      setOnlyAllowlisted
                     </button>
                   )}
                   {!!(library && account) && (

@@ -1,1 +1,3 @@
-export const allowlistAddresses = [["0xdecf4b112d4120b6998e5020a6b4819e490f7db6", 5]];
+export const allowlistAddresses = [
+    ["0x70997970C51812dc3A010C7d01b50e0d17dc79C8",3],
+];
