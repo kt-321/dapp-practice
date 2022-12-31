@@ -58,13 +58,10 @@ export const Demo = function () {
   const activating = (connection: typeof injected | typeof walletconnect) => connection === activatingConnector;
   const connected = (connection: typeof injected | typeof walletconnect) => connection === connector;
   const disabled = !triedEager || !!activatingConnector || connected(injected) || connected(walletconnect) || !!error;
-  // TODO env
   // an address which was got when deployed V1
-  const address = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+  const address = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const toAddress = "";
   const tokenId = 1;
-  // let cost = 0;
-  // let gasLimit = 285000;
 
   return (
     <>
@@ -132,48 +129,12 @@ export const Demo = function () {
                       type="button"
                       className="btn btn-primary"
                       onClick={async () => {
-                        console.log("estimateGas mint");
-
-                        // const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
-
-                        // await erc721KV1.estimateGas
-                        //   .mint(3, )
-                        //   .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
-                        //   .catch((err) => console.log("err:", err));
-                      }}
-                    >
-                      EstimateGas Mint
-                    </button>
-                  )}
-                  {!!(library && account) && (
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={async () => {
-                        console.log("estimateGas trasfer");
-
-                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
-
-                        await erc721KV1.estimateGas
-                          .transfer(account, toAddress, tokenId)
-                          .then((res) => window.alert(`gasPrice:${res.toNumber()}`))
-                          .catch((err) => console.log("err:", err));
-                      }}
-                    >
-                      EstimateGas Transfer
-                    </button>
-                  )}
-                  {!!(library && account) && (
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={async () => {
                         console.log("mint");
+                        console.log("address:", address);
 
                         const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
-                        // TODO 調整
-                        const cost = 3;
+                        const cost = ethers.utils.parseEther("0.01");
                         // const  gasLimit = 285000;
                         let allowlistMaxMintAmount;
 
@@ -313,7 +274,7 @@ export const Demo = function () {
                         const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
 
                         await erc721KV1
-                          .setMerkleRoot("0x3d1303368d48e6b465df9a7ef8d1557c71b4f173ba62f142e8ceb522fe3c63b2")
+                          .setMerkleRoot(process.env.NEXT_PUBLIC_MERKLE_PROOF)
                           .then((res) => {
                             window.alert(`success:${res}`);
                             console.log("res:", res);
@@ -322,27 +283,6 @@ export const Demo = function () {
                       }}
                     >
                       SetMerkleRoot
-                    </button>
-                  )}
-                  {!!(library && account) && (
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={async () => {
-                        console.log("setOnlyAllowlisted");
-
-                        const erc721KV1 = ERC721KV2__factory.connect(address, library.getSigner(account));
-
-                        await erc721KV1
-                          .setOnlyAllowlisted(true)
-                          .then((res) => {
-                            window.alert(`success:${res}`);
-                            console.log("res:", res);
-                          })
-                          .catch((err) => console.log("err:", err));
-                      }}
-                    >
-                      setOnlyAllowlisted
                     </button>
                   )}
                   {!!(library && account) && (
