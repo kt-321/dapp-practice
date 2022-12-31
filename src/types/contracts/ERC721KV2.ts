@@ -31,6 +31,7 @@ export interface ERC721KV2Interface extends utils.Interface {
     "helloV2()": FunctionFragment;
     "initialize()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "maxSupply()": FunctionFragment;
     "merkleRoot()": FunctionFragment;
     "mint(uint256,bytes32[])": FunctionFragment;
     "name()": FunctionFragment;
@@ -62,6 +63,7 @@ export interface ERC721KV2Interface extends utils.Interface {
       | "helloV2"
       | "initialize"
       | "isApprovedForAll"
+      | "maxSupply"
       | "merkleRoot"
       | "mint"
       | "name"
@@ -97,6 +99,7 @@ export interface ERC721KV2Interface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(functionFragment: "maxSupply", values?: undefined): string;
   encodeFunctionData(functionFragment: "merkleRoot", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "mint",
@@ -143,6 +146,7 @@ export interface ERC721KV2Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "helloV2", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isApprovedForAll", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "maxSupply", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "merkleRoot", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -270,6 +274,8 @@ export interface ERC721KV2 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    maxSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     merkleRoot(overrides?: CallOverrides): Promise<[string]>;
 
     mint(
@@ -374,6 +380,8 @@ export interface ERC721KV2 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
   merkleRoot(overrides?: CallOverrides): Promise<string>;
 
   mint(
@@ -474,6 +482,8 @@ export interface ERC721KV2 extends BaseContract {
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     merkleRoot(overrides?: CallOverrides): Promise<string>;
 
@@ -618,6 +628,8 @@ export interface ERC721KV2 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
     merkleRoot(overrides?: CallOverrides): Promise<BigNumber>;
 
     mint(
@@ -722,6 +734,8 @@ export interface ERC721KV2 extends BaseContract {
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    maxSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     merkleRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

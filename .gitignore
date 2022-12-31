@@ -6,6 +6,9 @@ dist-ssr
 
 node_modules
 .env
+.env.development
+memo
+.debug
 
 #Hardhat files
 cache

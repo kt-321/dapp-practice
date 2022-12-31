@@ -13,6 +13,7 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
     bool public onlyAllowlisted;
     mapping(address => uint256) public userMintedAmount;
     uint256 public cost;
+    uint256 public maxSupply;
 
     // counter for tokenId
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -29,7 +30,8 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
         __Ownable_init();
 
         onlyAllowlisted = true;
-        cost = 3;
+        cost = 10000;
+        maxSupply = 5;
     }
 
     modifier callerIsUser() {
@@ -38,7 +40,6 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
     }
 
     function mint(uint256 _maxMintAmount, bytes32[] calldata _merkleProof) public payable callerIsUser {
-        // TODO add require
         require(cost <= msg.value, "insufficient funds");
         uint256 maxMintAmountPerAddress;
         _tokenIds.increment();
@@ -50,6 +51,8 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
             require(MerkleProof.verify(_merkleProof, merkleRoot, leaf), "user is not allowlisted");
             maxMintAmountPerAddress = _maxMintAmount;
         }
+
+        require(maxMintAmountPerAddress - userMintedAmount[msg.sender] > 0 , "max NFT per address exceeded");
 
         userMintedAmount[msg.sender] ++;
 
