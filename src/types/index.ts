@@ -3,13 +3,18 @@
 /* tslint:disable */
 
 /* eslint-disable */
+import type * as chainlink from "./@chainlink";
 import type * as openzeppelin from "./@openzeppelin";
 import type * as contracts from "./contracts";
+
+export type { chainlink };
 
 export type { openzeppelin };
 
 export type { contracts };
 export * as factories from "./factories";
+export type { AggregatorV3Interface } from "./@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface";
+export { AggregatorV3Interface__factory } from "./factories/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface__factory";
 export type { OwnableUpgradeable } from "./@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable";
 export { OwnableUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable__factory";
 export type { IERC1822ProxiableUpgradeable } from "./@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol/IERC1822ProxiableUpgradeable";

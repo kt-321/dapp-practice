@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
     bytes32 public merkleRoot;
@@ -14,6 +15,7 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
     mapping(address => uint256) public userMintedAmount;
     uint256 public cost;
     uint256 public maxSupply;
+    AggregatorV3Interface public priceFeed;
 
     // counter for tokenId
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -23,7 +25,7 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
     constructor() initializer {}
 
     // initialize updatable in openzeppelin
-    function initialize() public initializer {
+    function initialize(address priceFeedAddress) public initializer {
         // initialize ERC721
         __ERC721_init("ERC721K", "ERK");
         // Ownable（generate onlyOwner）
@@ -32,11 +34,28 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
         onlyAllowlisted = true;
         cost = 10000;
         maxSupply = 5;
+
+        // ETH / USD
+        priceFeed = AggregatorV3Interface(
+            priceFeedAddress
+        );
     }
 
     modifier callerIsUser() {
         require(tx.origin == msg.sender, "The caller is another contract.");
         _;
+    }
+
+    function getLatestPrice() public view returns (int256) {
+        (
+            uint80 roundID,
+            int256 price,
+            uint256 startedAt,
+            uint256 timeStamp,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        // for ETH / USD price is scaled up by 10 ** 8
+        return price / 1e8;
     }
 
     function mint(uint256 _maxMintAmount, bytes32[] calldata _merkleProof) public payable callerIsUser {

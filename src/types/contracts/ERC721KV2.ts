@@ -28,8 +28,9 @@ export interface ERC721KV2Interface extends utils.Interface {
     "burn(uint256)": FunctionFragment;
     "cost()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getLatestPrice()": FunctionFragment;
     "helloV2()": FunctionFragment;
-    "initialize()": FunctionFragment;
+    "initialize(address)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "maxSupply()": FunctionFragment;
     "merkleRoot()": FunctionFragment;
@@ -38,6 +39,7 @@ export interface ERC721KV2Interface extends utils.Interface {
     "onlyAllowlisted()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "priceFeed()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
@@ -60,6 +62,7 @@ export interface ERC721KV2Interface extends utils.Interface {
       | "burn"
       | "cost"
       | "getApproved"
+      | "getLatestPrice"
       | "helloV2"
       | "initialize"
       | "isApprovedForAll"
@@ -70,6 +73,7 @@ export interface ERC721KV2Interface extends utils.Interface {
       | "onlyAllowlisted"
       | "owner"
       | "ownerOf"
+      | "priceFeed"
       | "renounceOwnership"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
@@ -93,8 +97,9 @@ export interface ERC721KV2Interface extends utils.Interface {
   encodeFunctionData(functionFragment: "burn", values: [PromiseOrValue<BigNumberish>]): string;
   encodeFunctionData(functionFragment: "cost", values?: undefined): string;
   encodeFunctionData(functionFragment: "getApproved", values: [PromiseOrValue<BigNumberish>]): string;
+  encodeFunctionData(functionFragment: "getLatestPrice", values?: undefined): string;
   encodeFunctionData(functionFragment: "helloV2", values?: undefined): string;
-  encodeFunctionData(functionFragment: "initialize", values?: undefined): string;
+  encodeFunctionData(functionFragment: "initialize", values: [PromiseOrValue<string>]): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
@@ -109,6 +114,7 @@ export interface ERC721KV2Interface extends utils.Interface {
   encodeFunctionData(functionFragment: "onlyAllowlisted", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "ownerOf", values: [PromiseOrValue<BigNumberish>]): string;
+  encodeFunctionData(functionFragment: "priceFeed", values?: undefined): string;
   encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
@@ -143,6 +149,7 @@ export interface ERC721KV2Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "cost", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getApproved", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getLatestPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "helloV2", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isApprovedForAll", data: BytesLike): Result;
@@ -153,6 +160,7 @@ export interface ERC721KV2Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "onlyAllowlisted", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "priceFeed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "safeTransferFrom(address,address,uint256)", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "safeTransferFrom(address,address,uint256,bytes)", data: BytesLike): Result;
@@ -264,9 +272,14 @@ export interface ERC721KV2 extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[string]>;
 
+    getLatestPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     helloV2(overrides?: CallOverrides): Promise<[string]>;
 
-    initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
+    initialize(
+      priceFeedAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -291,6 +304,8 @@ export interface ERC721KV2 extends BaseContract {
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     ownerOf(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[string]>;
+
+    priceFeed(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
 
@@ -370,9 +385,14 @@ export interface ERC721KV2 extends BaseContract {
 
   getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>;
 
+  getLatestPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
   helloV2(overrides?: CallOverrides): Promise<string>;
 
-  initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
+  initialize(
+    priceFeedAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
@@ -397,6 +417,8 @@ export interface ERC721KV2 extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>;
+
+  priceFeed(overrides?: CallOverrides): Promise<string>;
 
   renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
 
@@ -473,9 +495,11 @@ export interface ERC721KV2 extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>;
 
+    getLatestPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
     helloV2(overrides?: CallOverrides): Promise<string>;
 
-    initialize(overrides?: CallOverrides): Promise<void>;
+    initialize(priceFeedAddress: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -500,6 +524,8 @@ export interface ERC721KV2 extends BaseContract {
     owner(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>;
+
+    priceFeed(overrides?: CallOverrides): Promise<string>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -618,9 +644,14 @@ export interface ERC721KV2 extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
 
+    getLatestPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
     helloV2(overrides?: CallOverrides): Promise<BigNumber>;
 
-    initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>;
+    initialize(
+      priceFeedAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -645,6 +676,8 @@ export interface ERC721KV2 extends BaseContract {
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+
+    priceFeed(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>;
 
@@ -725,9 +758,14 @@ export interface ERC721KV2 extends BaseContract {
 
     getApproved(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getLatestPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     helloV2(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    initialize(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<PopulatedTransaction>;
+    initialize(
+      priceFeedAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -752,6 +790,8 @@ export interface ERC721KV2 extends BaseContract {
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(tokenId: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    priceFeed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<PopulatedTransaction>;
 

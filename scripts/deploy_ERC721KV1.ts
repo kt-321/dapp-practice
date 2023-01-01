@@ -7,9 +7,13 @@ async function main() {
   // const ERC721KV1Factory = new ERC721KV1__factory();
 
   const ERC721KV1Factory = await ethers.getContractFactory("ERC721KV1");
-  const ERC721KV1Contract = await upgrades.deployProxy(ERC721KV1Factory, [], {
-    initializer: "initialize",
-  });
+  const ERC721KV1Contract = await upgrades.deployProxy(
+    ERC721KV1Factory,
+    ["0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"],
+    {
+      initializer: "initialize",
+    }
+  );
 
   console.log("Deploying...: ", ERC721KV1Contract.address);
   await ERC721KV1Contract.deployed();
