@@ -62,6 +62,7 @@ export const Demo = function () {
   const address = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
   const toAddress = "";
   const tokenId = 1;
+  let hexProof;
 
   return (
     <>
@@ -146,15 +147,15 @@ export const Demo = function () {
                         const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
 
                         const addressId = nameMap.indexOf(account);
-                        const claimingAddress = ethers.utils.solidityKeccak256(
-                          ["address", "uint256"],
-                          [allowlistAddresses[0][0], allowlistAddresses[0][1]]
-                        );
-                        const hexProof = merkleTree.getHexProof(claimingAddress);
+                        // const claimingAddress = ethers.utils.solidityKeccak256(
+                        //   ["address", "uint256"],
+                        //   [allowlistAddresses[0][0], allowlistAddresses[0][1]]
+                        // );
+                        // const hexProof = merkleTree.getHexProof(claimingAddress);
 
-                        console.log("hexProof:", hexProof);
-                        console.log("addressId:", addressId);
-                        console.log("claimingAddress:", claimingAddress);
+                        // console.log("hexProof:", hexProof);
+                        // console.log("addressId:", addressId);
+                        // console.log("claimingAddress:", claimingAddress);
 
                         if (addressId == -1) {
                           allowlistMaxMintAmount = 0;
@@ -162,7 +163,7 @@ export const Demo = function () {
                             ["address", "uint256"],
                             [allowlistAddresses[0][0], allowlistAddresses[0][1]]
                           );
-                          const hexProof = merkleTree.getHexProof(claimingAddress);
+                          hexProof = merkleTree.getHexProof(claimingAddress);
                           console.log("hexProof:", hexProof);
                         } else {
                           allowlistMaxMintAmount = allowlistAddresses[addressId][1];
@@ -170,7 +171,7 @@ export const Demo = function () {
                             ["address", "uint256"],
                             [allowlistAddresses[addressId][0], allowlistAddresses[addressId][1]]
                           );
-                          const hexProof = merkleTree.getHexProof(claimingAddress);
+                          hexProof = merkleTree.getHexProof(claimingAddress);
                           console.log("hexProof:", hexProof);
                         }
 
