@@ -120,6 +120,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.BoxV2__factory>;
     getContractFactory(
+      name: "ERC20KV1",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20KV1__factory>;
+    getContractFactory(
       name: "ERC721K",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC721K__factory>;
@@ -236,6 +240,7 @@ declare module "hardhat/types/runtime" {
     getContractAt(name: "IERC165", address: string, signer?: ethers.Signer): Promise<Contracts.IERC165>;
     getContractAt(name: "Box", address: string, signer?: ethers.Signer): Promise<Contracts.Box>;
     getContractAt(name: "BoxV2", address: string, signer?: ethers.Signer): Promise<Contracts.BoxV2>;
+    getContractAt(name: "ERC20KV1", address: string, signer?: ethers.Signer): Promise<Contracts.ERC20KV1>;
     getContractAt(name: "ERC721K", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721K>;
     getContractAt(name: "ERC721KV1", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721KV1>;
     getContractAt(name: "ERC721KV2", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721KV2>;

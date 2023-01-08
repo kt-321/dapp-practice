@@ -4,6 +4,7 @@
   "scripts": {
     "build": "npx hardhat compile --network localhost && next build",
     "compile": "yarn hardhat compile && yarn hardhat typechain",
+    "deploy:ERC20KV1:local": "npx hardhat run scripts/deploy_ERC20KV1.ts --network localhost",
     "deploy:ERC721K:local": "npx hardhat run scripts/deploy_ERC721K.ts --network localhost",
     "deploy:ERC721KV1:goerli": "npx hardhat run scripts/deploy_ERC721KV1.ts --network goerli",
     "deploy:ERC721KV1:local": "npx hardhat run scripts/deploy_ERC721KV1.ts --network localhost",

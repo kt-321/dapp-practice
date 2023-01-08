@@ -69,6 +69,8 @@ export type { Box } from "./contracts/Box";
 export { Box__factory } from "./factories/contracts/Box__factory";
 export type { BoxV2 } from "./contracts/BoxV2";
 export { BoxV2__factory } from "./factories/contracts/BoxV2__factory";
+export type { ERC20KV1 } from "./contracts/ERC20KV1";
+export { ERC20KV1__factory } from "./factories/contracts/ERC20KV1__factory";
 export type { ERC721K } from "./contracts/ERC721K";
 export { ERC721K__factory } from "./factories/contracts/ERC721K__factory";
 export type { ERC721KV1 } from "./contracts/ERC721KV1";

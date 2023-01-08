@@ -3,6 +3,7 @@
 /* eslint-disable */
 export type { Box } from "./Box";
 export type { BoxV2 } from "./BoxV2";
+export type { ERC20KV1 } from "./ERC20KV1";
 export type { ERC721K } from "./ERC721K";
 export type { ERC721KV1 } from "./ERC721KV1";
 export type { ERC721KV2 } from "./ERC721KV2";
