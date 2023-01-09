@@ -15,6 +15,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AggregatorV3Interface__factory>;
     getContractFactory(
+      name: "VRFCoordinatorV2Interface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VRFCoordinatorV2Interface__factory>;
+    getContractFactory(
+      name: "VRFConsumerBaseV2",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VRFConsumerBaseV2__factory>;
+    getContractFactory(
       name: "OwnableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OwnableUpgradeable__factory>;
@@ -83,6 +91,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165Upgradeable__factory>;
     getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
       name: "ERC2771Context",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC2771Context__factory>;
@@ -90,6 +102,18 @@ declare module "hardhat/types/runtime" {
       name: "MinimalForwarder",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MinimalForwarder__factory>;
+    getContractFactory(
+      name: "ERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20__factory>;
+    getContractFactory(
+      name: "IERC20Metadata",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Metadata__factory>;
+    getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
       name: "ERC721",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -120,9 +144,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.BoxV2__factory>;
     getContractFactory(
-      name: "ERC20KV1",
+      name: "ERC20K",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC20KV1__factory>;
+    ): Promise<Contracts.ERC20K__factory>;
     getContractFactory(
       name: "ERC721K",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -149,6 +173,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.AggregatorV3Interface>;
+    getContractAt(
+      name: "VRFCoordinatorV2Interface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VRFCoordinatorV2Interface>;
+    getContractAt(
+      name: "VRFConsumerBaseV2",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VRFConsumerBaseV2>;
     getContractAt(
       name: "OwnableUpgradeable",
       address: string,
@@ -226,12 +260,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165Upgradeable>;
+    getContractAt(name: "Ownable", address: string, signer?: ethers.Signer): Promise<Contracts.Ownable>;
     getContractAt(name: "ERC2771Context", address: string, signer?: ethers.Signer): Promise<Contracts.ERC2771Context>;
     getContractAt(
       name: "MinimalForwarder",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MinimalForwarder>;
+    getContractAt(name: "ERC20", address: string, signer?: ethers.Signer): Promise<Contracts.ERC20>;
+    getContractAt(name: "IERC20Metadata", address: string, signer?: ethers.Signer): Promise<Contracts.IERC20Metadata>;
+    getContractAt(name: "IERC20", address: string, signer?: ethers.Signer): Promise<Contracts.IERC20>;
     getContractAt(name: "ERC721", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721>;
     getContractAt(name: "IERC721Metadata", address: string, signer?: ethers.Signer): Promise<Contracts.IERC721Metadata>;
     getContractAt(name: "IERC721", address: string, signer?: ethers.Signer): Promise<Contracts.IERC721>;
@@ -240,7 +278,7 @@ declare module "hardhat/types/runtime" {
     getContractAt(name: "IERC165", address: string, signer?: ethers.Signer): Promise<Contracts.IERC165>;
     getContractAt(name: "Box", address: string, signer?: ethers.Signer): Promise<Contracts.Box>;
     getContractAt(name: "BoxV2", address: string, signer?: ethers.Signer): Promise<Contracts.BoxV2>;
-    getContractAt(name: "ERC20KV1", address: string, signer?: ethers.Signer): Promise<Contracts.ERC20KV1>;
+    getContractAt(name: "ERC20K", address: string, signer?: ethers.Signer): Promise<Contracts.ERC20K>;
     getContractAt(name: "ERC721K", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721K>;
     getContractAt(name: "ERC721KV1", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721KV1>;
     getContractAt(name: "ERC721KV2", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721KV2>;

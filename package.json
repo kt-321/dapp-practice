@@ -4,7 +4,8 @@
   "scripts": {
     "build": "npx hardhat compile --network localhost && next build",
     "compile": "yarn hardhat compile && yarn hardhat typechain",
-    "deploy:ERC20KV1:local": "npx hardhat run scripts/deploy_ERC20KV1.ts --network localhost",
+    "deploy:ERC20K:goerli": "npx hardhat run scripts/deploy_ERC20K.ts --network goerli",
+    "deploy:ERC20K:local": "npx hardhat run scripts/deploy_ERC20K.ts --network localhost",
     "deploy:ERC721K:local": "npx hardhat run scripts/deploy_ERC721K.ts --network localhost",
     "deploy:ERC721KV1:goerli": "npx hardhat run scripts/deploy_ERC721KV1.ts --network goerli",
     "deploy:ERC721KV1:local": "npx hardhat run scripts/deploy_ERC721KV1.ts --network localhost",
@@ -50,7 +51,7 @@
     "web3-react": "5.0.5"
   },
   "devDependencies": {
-    "@openzeppelin/contracts": "4.8.0",
+    "@openzeppelin/contracts": "^4.8.0",
     "@trivago/prettier-plugin-sort-imports": "4.0.0",
     "@typechain/ethers-v5": "10.2.0",
     "@types/chai": "4.3.4",

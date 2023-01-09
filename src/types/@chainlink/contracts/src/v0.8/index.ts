@@ -6,3 +6,4 @@
 import type * as interfaces from "./interfaces";
 
 export type { interfaces };
+export type { VRFConsumerBaseV2 } from "./VRFConsumerBaseV2";

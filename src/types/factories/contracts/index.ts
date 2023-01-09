@@ -3,7 +3,7 @@
 /* eslint-disable */
 export { Box__factory } from "./Box__factory";
 export { BoxV2__factory } from "./BoxV2__factory";
-export { ERC20KV1__factory } from "./ERC20KV1__factory";
+export { ERC20K__factory } from "./ERC20K__factory";
 export { ERC721K__factory } from "./ERC721K__factory";
 export { ERC721KV1__factory } from "./ERC721KV1__factory";
 export { ERC721KV2__factory } from "./ERC721KV2__factory";
