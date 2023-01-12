@@ -5,6 +5,31 @@ pragma solidity ^0.8.9;
 contract TryInlineAssembly {
     constructor() {}
 
+    function useStorage2() public returns (uint256 v1, uint256 v2, uint256 v3){
+        assembly {
+            sstore(0x0, 100)
+            v1 := sload(0x0)
+            // non-zero to non-zero
+            sstore(0x0, 10)
+            v2 := sload(0x0)
+            // non-zero to non-zero
+            sstore(0x0, 200)
+            v3 := sload(0x0)
+        }
+    }
+    function useStorage1() public returns (uint256 v1, uint256 v2, uint256 v3){
+        assembly {
+            sstore(0x0, 100)
+            v1 := sload(0x0)
+            // non-zero to zero
+            sstore(0x0, 0)
+            v2 := sload(0x0)
+            // zero to non-zero
+            sstore(0x0, 200)
+            v3 := sload(0x0)
+        }
+    }
+
     function useMemory(uint a) public pure returns (uint256){
         uint[] memory array_num1 = new uint[](a);
         uint res = 0;
