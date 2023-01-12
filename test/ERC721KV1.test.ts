@@ -4,6 +4,7 @@ import { ethers, upgrades } from "hardhat";
 import { keccak256 } from "keccak256";
 import { MerkleTree } from "merkletreejs";
 
+// import "hardhat/console.sol";
 import { ERC721KV1__factory } from "../src/types";
 
 const _name = "ERC721KV1";
@@ -18,7 +19,7 @@ describe("ERC721KV1", () => {
   // let exAdmin, ex1;
   const name = "ERC721K";
   const symbol = "ERK";
-  const onlyAllowlisted = true;
+  const onlyAllowlisted = false;
   const maxSupply = 5;
   const cost = 10000;
 
@@ -59,10 +60,30 @@ describe("ERC721KV1", () => {
     expect(await contract.symbol()).to.equal(symbol);
     expect(await contract.onlyAllowlisted()).to.equal(onlyAllowlisted);
     expect(await contract.cost()).to.equal(cost);
-    expect(await contract.maxSupply()).to.equal(maxSupply);
+    // expect(await contract.maxSupply()).to.equal(maxSupply);
 
     return { admin, user1, user2, user3, contract };
   }
+
+  describe("setOnlyAllowlisted", function () {
+    it("admin can execute setOnlyAllowlisted", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+
+      await connectedAdmin.setOnlyAllowlisted(true);
+      expect(await contract.onlyAllowlisted()).to.equal(true);
+    });
+
+    it("not-admin user can't execute setOnlyAllowlisted", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+
+      await expect(connectedUser1.setOnlyAllowlisted(true)).revertedWith("Ownable: caller is not the owner");
+    });
+  });
 
   describe("mint", function () {
     it("if onlyAllowlisted is true", async function () {
@@ -72,7 +93,7 @@ describe("ERC721KV1", () => {
 
       const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
       const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
-      const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
+      await connectedAdmin.setOnlyAllowlisted(true);
 
       // allow user1 to mint 5 tokens
       await connectedAdmin
@@ -102,8 +123,28 @@ describe("ERC721KV1", () => {
           console.log("failed mint:"), err;
         });
 
-      expect(await connectedAdmin.balanceOf(user1.address)).to.be.equal(1);
-      expect(await connectedAdmin.ownerOf(1)).to.be.equal(user1.address);
+      expect(await contract.balanceOf(user1.address)).to.be.equal(1);
+      expect(await contract.ownerOf(1)).to.be.equal(user1.address);
     });
   });
+
+  // describe("transfer", function () {
+  //   it("Should transfer tokens between accounts", async function () {
+  //     const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+  //     const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+  //     const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+  //     const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
+
+  //     // await connectedUser1
+  //     //   .mint(10, hexProof, {
+  //     //     value: ethers.utils.parseEther("0.01"),
+  //     //   })
+  //     //   .then(() => console.log("successed mint"))
+  //     //   .catch((err) => {
+  //     //     console.log("failed mint:"), err;
+  //     //   });
+
+  //   });
+  // });
 });

@@ -167,6 +167,10 @@ declare module "hardhat/types/runtime" {
       name: "ITManToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ITManToken__factory>;
+    getContractFactory(
+      name: "TryInlineAssembly",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TryInlineAssembly__factory>;
 
     getContractAt(
       name: "AggregatorV3Interface",
@@ -284,6 +288,11 @@ declare module "hardhat/types/runtime" {
     getContractAt(name: "ERC721KV2", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721KV2>;
     getContractAt(name: "Greeter", address: string, signer?: ethers.Signer): Promise<Contracts.Greeter>;
     getContractAt(name: "ITManToken", address: string, signer?: ethers.Signer): Promise<Contracts.ITManToken>;
+    getContractAt(
+      name: "TryInlineAssembly",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TryInlineAssembly>;
 
     // default types
     getContractFactory(name: string, signerOrOptions?: ethers.Signer | FactoryOptions): Promise<ethers.ContractFactory>;

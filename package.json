@@ -17,7 +17,8 @@
     "merkle": "npx node merkle_tree.mjs",
     "prepare": "husky install",
     "start": "next start",
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "test-gas": "REPORT_GAS=true npx hardhat test"
   },
   "dependencies": {
     "@chainlink/contracts": "^0.5.1",

@@ -93,3 +93,5 @@ export type { Greeter } from "./contracts/Greeter";
 export { Greeter__factory } from "./factories/contracts/Greeter__factory";
 export type { ITManToken } from "./contracts/ITManToken";
 export { ITManToken__factory } from "./factories/contracts/ITManToken__factory";
+export type { TryInlineAssembly } from "./contracts/TryInlineAssembly";
+export { TryInlineAssembly__factory } from "./factories/contracts/TryInlineAssembly__factory";

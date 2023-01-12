@@ -9,3 +9,4 @@ export type { ERC721KV1 } from "./ERC721KV1";
 export type { ERC721KV2 } from "./ERC721KV2";
 export type { Greeter } from "./Greeter";
 export type { ITManToken } from "./ITManToken";
+export type { TryInlineAssembly } from "./TryInlineAssembly";

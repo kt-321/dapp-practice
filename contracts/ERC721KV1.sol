@@ -31,7 +31,7 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
         // Ownable（generate onlyOwner）
         __Ownable_init();
 
-        onlyAllowlisted = true;
+        onlyAllowlisted = false;
         cost = 10000;
         maxSupply = 5;
 

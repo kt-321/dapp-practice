@@ -22,6 +22,9 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrVal
 
 export interface ERC20KInterface extends utils.Interface {
   functions: {
+    "_name()": FunctionFragment;
+    "_symbol()": FunctionFragment;
+    "_totalSupply()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -48,6 +51,9 @@ export interface ERC20KInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "_name"
+      | "_symbol"
+      | "_totalSupply"
       | "allowance"
       | "approve"
       | "balanceOf"
@@ -72,6 +78,9 @@ export interface ERC20KInterface extends utils.Interface {
       | "transferOwnership"
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: "_name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "_symbol", values?: undefined): string;
+  encodeFunctionData(functionFragment: "_totalSupply", values?: undefined): string;
   encodeFunctionData(functionFragment: "allowance", values: [PromiseOrValue<string>, PromiseOrValue<string>]): string;
   encodeFunctionData(
     functionFragment: "approve",
@@ -116,6 +125,9 @@ export interface ERC20KInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "transferOwnership", values: [PromiseOrValue<string>]): string;
 
+  decodeFunctionResult(functionFragment: "_name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "_symbol", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "_totalSupply", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -208,6 +220,12 @@ export interface ERC20K extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    _name(overrides?: CallOverrides): Promise<[string]>;
+
+    _symbol(overrides?: CallOverrides): Promise<[string]>;
+
+    _totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     allowance(
       owner: PromiseOrValue<string>,
       spender: PromiseOrValue<string>,
@@ -293,6 +311,12 @@ export interface ERC20K extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
+
+  _name(overrides?: CallOverrides): Promise<string>;
+
+  _symbol(overrides?: CallOverrides): Promise<string>;
+
+  _totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   allowance(
     owner: PromiseOrValue<string>,
@@ -380,6 +404,12 @@ export interface ERC20K extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    _name(overrides?: CallOverrides): Promise<string>;
+
+    _symbol(overrides?: CallOverrides): Promise<string>;
+
+    _totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: PromiseOrValue<string>,
       spender: PromiseOrValue<string>,
@@ -496,6 +526,12 @@ export interface ERC20K extends BaseContract {
   };
 
   estimateGas: {
+    _name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _symbol(overrides?: CallOverrides): Promise<BigNumber>;
+
+    _totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: PromiseOrValue<string>,
       spender: PromiseOrValue<string>,
@@ -583,6 +619,12 @@ export interface ERC20K extends BaseContract {
   };
 
   populateTransaction: {
+    _name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    _symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    _totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     allowance(
       owner: PromiseOrValue<string>,
       spender: PromiseOrValue<string>,
