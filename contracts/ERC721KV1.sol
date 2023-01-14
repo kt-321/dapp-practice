@@ -10,6 +10,8 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
+    string baseURI;
+    string public baseExtension;
     bytes32 public merkleRoot;
     bool public onlyAllowlisted;
     mapping(address => uint256) public userMintedAmount;
@@ -34,11 +36,14 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
         onlyAllowlisted = false;
         cost = 10000;
         maxSupply = 5;
+        baseExtension = ".json";
 
         // ETH / USD
         priceFeed = AggregatorV3Interface(
             priceFeedAddress
         );
+
+        setBaseURI("ipfs://QmV5QLUos6RtouSeAh12LGJH6qNN4GJ3zME4jYBKMqu44x/");
     }
 
     modifier callerIsUser() {
@@ -86,6 +91,23 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
 
     function burn(uint256 tokenId) public {
         _burn(tokenId);
+    }
+
+    // internal
+    function _baseURI() internal view virtual override returns (string memory) {
+        return baseURI;
+    }
+
+    function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
+        return string(abi.encodePacked(super.tokenURI(_tokenId), baseExtension));
+    }
+
+    function setBaseURI(string memory _newBaseURI) public onlyOwner {
+        baseURI = _newBaseURI;
+    }
+
+    function setBaseExtension(string memory _newBaseExtension) public onlyOwner {
+        baseExtension = _newBaseExtension;
     }
 
     function setMerkleRoot(bytes32 _merkleRoot) public onlyOwner {

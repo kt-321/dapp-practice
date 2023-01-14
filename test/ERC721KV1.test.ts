@@ -70,7 +70,6 @@ describe("ERC721KV1", () => {
       const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
 
       const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
-      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
 
       await connectedAdmin.setOnlyAllowlisted(true);
       expect(await contract.onlyAllowlisted()).to.equal(true);
@@ -88,8 +87,6 @@ describe("ERC721KV1", () => {
   describe("mint", function () {
     it("if onlyAllowlisted is true", async function () {
       const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
-      // TODO
-      // setmerkleroot
 
       const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
       const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
@@ -102,7 +99,6 @@ describe("ERC721KV1", () => {
           console.log("successed setMerkleRoot");
         })
         .catch((err) => {
-          // TODO fail the test
           console.log("failed setMerkleRoot:", err);
         });
 
@@ -125,6 +121,14 @@ describe("ERC721KV1", () => {
 
       expect(await contract.balanceOf(user1.address)).to.be.equal(1);
       expect(await contract.ownerOf(1)).to.be.equal(user1.address);
+    });
+  });
+
+  describe("tokenURI", function () {
+    it("can get tokenURI", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      expect(await contract.tokenURI(1)).to.be.equal("ipfs://QmV5QLUos6RtouSeAh12LGJH6qNN4GJ3zME4jYBKMqu44x/1.json");
     });
   });
 
