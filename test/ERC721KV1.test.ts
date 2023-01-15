@@ -1,13 +1,12 @@
+// import { loadFixture } from "ethereum-waffle";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
-import { loadFixture } from "ethereum-waffle";
 import { ethers, upgrades } from "hardhat";
 import { keccak256 } from "keccak256";
 import { MerkleTree } from "merkletreejs";
 
 // import "hardhat/console.sol";
 import { ERC721KV1__factory } from "../src/types";
-
-const _name = "ERC721KV1";
 
 describe("ERC721KV1", () => {
   // let admin, signer, user1, user2, user3;
@@ -45,7 +44,10 @@ describe("ERC721KV1", () => {
   // });
 
   async function deployFixture() {
+    // TODO
     const [admin, user1, user2, user3] = await ethers.getSigners();
+    // console.log("")
+
     const ERC721KV1Factory = new ERC721KV1__factory(admin);
 
     const contract = await upgrades.deployProxy(ERC721KV1Factory, ["0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"], {
@@ -128,27 +130,152 @@ describe("ERC721KV1", () => {
     it("can get tokenURI", async function () {
       const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
 
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+
+      await connectedUser1
+        .mint(5, [], {
+          value: ethers.utils.parseEther("0.01"),
+        })
+        .then(() => console.log("successed mint"))
+        .catch((err) => {
+          console.log("failed mint:"), err;
+        });
+
       expect(await contract.tokenURI(1)).to.be.equal("ipfs://QmV5QLUos6RtouSeAh12LGJH6qNN4GJ3zME4jYBKMqu44x/1.json");
     });
   });
 
-  // describe("transfer", function () {
-  //   it("Should transfer tokens between accounts", async function () {
-  //     const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+  describe("transfer", function () {
+    it("Should transfer tokens between accounts", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
 
-  //     const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
-  //     const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
-  //     const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
+      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+      const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
 
-  //     // await connectedUser1
-  //     //   .mint(10, hexProof, {
-  //     //     value: ethers.utils.parseEther("0.01"),
-  //     //   })
-  //     //   .then(() => console.log("successed mint"))
-  //     //   .catch((err) => {
-  //     //     console.log("failed mint:"), err;
-  //     //   });
+      await connectedUser1
+        .mint(5, [], {
+          value: ethers.utils.parseEther("0.01"),
+        })
+        .then(() => console.log("successed mint"))
+        .catch((err) => {
+          console.log("failed mint:"), err;
+        });
 
-  //   });
-  // });
+      await connectedUser1
+        .transfer(user1.address, user2.address, 1)
+        .then(() => console.log("successed transfer"))
+        .catch((err) => {
+          console.log("failed transfer:"), err;
+        });
+    });
+  });
+
+  describe("approve", function () {
+    it("token owner can approve", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+      const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
+
+      await connectedUser1
+        .mint(5, [], {
+          value: ethers.utils.parseEther("0.01"),
+        })
+        .then(() => console.log("successed mint"))
+        .catch((err) => {
+          console.log("failed mint:"), err;
+        });
+
+      await connectedUser1
+        .approve(user2.address, 1)
+        .then(() => console.log("success approve"))
+        .catch((err) => {
+          console.log("err:", err);
+        });
+
+      expect(await contract.getApproved(1)).to.be.equal(user2.address);
+      // console.log("approvals:", approvals)
+      // console.log("user2.address:", user2.address)
+    });
+  });
+
+  describe("transferFrom", function () {
+    it("Not Approved user cannot transferFrom", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+      const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
+
+      await connectedUser1
+        .mint(5, [], {
+          value: ethers.utils.parseEther("0.01"),
+        })
+        .then(() => console.log("successed mint"))
+        .catch((err) => {
+          console.log("failed mint:"), err;
+        });
+
+      const user1Balance = await contract.balanceOf(user1.address);
+      const user2InitialBalance = await contract.balanceOf(user2.address);
+      console.log("user1Balance:", user1Balance);
+      console.log("user2InitialBalance:", user2InitialBalance);
+
+      console.log("***user1.address:", user1.address);
+      console.log("***user2.address:", user2.address);
+
+      console.log("***ownerOf:", await contract.ownerOf(1));
+
+      await expect(connectedUser2.transferFrom(user1.address, user2.address, 1)).to.revertedWith(
+        "ERC721: caller is not token owner or approved"
+      );
+
+      // console.log("user2InitialBalance.add(1):", user2InitialBalance.add(1))
+      // console.log("contract.balanceOf(user2.address):", await contract.balanceOf(user2.address))
+
+      // expect(await contract.balanceOf(user2.address)).to.equal(1)
+    });
+    it("Not appproved and not owner user cannot transferFrom", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+      const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
+
+      await connectedUser1
+        .mint(5, [], {
+          value: ethers.utils.parseEther("0.01"),
+        })
+        .then(() => console.log("successed mint"))
+        .catch((err) => {
+          console.log("failed mint:"), err;
+        });
+
+      const user1Balance = await contract.balanceOf(user1.address);
+      const user2InitialBalance = await contract.balanceOf(user2.address);
+      console.log("user1Balance:", user1Balance);
+      console.log("user2InitialBalance:", user2InitialBalance);
+
+      console.log("***user1.address:", user1.address);
+      console.log("***user2.address:", user2.address);
+
+      console.log("***ownerOf:", await contract.ownerOf(1));
+
+      await connectedUser1
+        .approve(user2.address, 1)
+        .then(() => console.log("success approve"))
+        .catch((err) => {
+          console.log("err:", err);
+        });
+
+      await connectedUser2.transferFrom(user1.address, user2.address, 1);
+
+      // console.log("user2InitialBalance.add(1):", user2InitialBalance.add(1))
+      // console.log("contract.balanceOf(user2.address):", await contract.balanceOf(user2.address))
+
+      // expect(await contract.balanceOf(user2.address)).to.equal(1)
+    });
+  });
 });

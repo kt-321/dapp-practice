@@ -51,8 +51,6 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
         _;
     }
 
-    // TODO tokenURI
-
     function getLatestPrice() public view returns (int256) {
         (
             uint80 roundID,
@@ -76,6 +74,8 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
             bytes32 leaf = keccak256(abi.encodePacked(msg.sender, _maxMintAmount));
             require(MerkleProof.verify(_merkleProof, merkleRoot, leaf), "user is not allowlisted");
             maxMintAmountPerAddress = _maxMintAmount;
+        } else {
+            maxMintAmountPerAddress = 5;
         }
 
         require(maxMintAmountPerAddress - userMintedAmount[msg.sender] > 0 , "max NFT per address exceeded");
