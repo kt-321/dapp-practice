@@ -41,6 +41,7 @@ export interface ERC721KV1Interface extends utils.Interface {
     "ownerOf(uint256)": FunctionFragment;
     "priceFeed()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "royaltyInfo(uint256,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -48,6 +49,7 @@ export interface ERC721KV1Interface extends utils.Interface {
     "setBaseURI(string)": FunctionFragment;
     "setMerkleRoot(bytes32)": FunctionFragment;
     "setOnlyAllowlisted(bool)": FunctionFragment;
+    "setTokenRoyalty(uint256,address,uint96)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
@@ -77,6 +79,7 @@ export interface ERC721KV1Interface extends utils.Interface {
       | "ownerOf"
       | "priceFeed"
       | "renounceOwnership"
+      | "royaltyInfo"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
@@ -84,6 +87,7 @@ export interface ERC721KV1Interface extends utils.Interface {
       | "setBaseURI"
       | "setMerkleRoot"
       | "setOnlyAllowlisted"
+      | "setTokenRoyalty"
       | "supportsInterface"
       | "symbol"
       | "tokenURI"
@@ -121,6 +125,10 @@ export interface ERC721KV1Interface extends utils.Interface {
   encodeFunctionData(functionFragment: "priceFeed", values?: undefined): string;
   encodeFunctionData(functionFragment: "renounceOwnership", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "royaltyInfo",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
@@ -136,6 +144,10 @@ export interface ERC721KV1Interface extends utils.Interface {
   encodeFunctionData(functionFragment: "setBaseURI", values: [PromiseOrValue<string>]): string;
   encodeFunctionData(functionFragment: "setMerkleRoot", values: [PromiseOrValue<BytesLike>]): string;
   encodeFunctionData(functionFragment: "setOnlyAllowlisted", values: [PromiseOrValue<boolean>]): string;
+  encodeFunctionData(
+    functionFragment: "setTokenRoyalty",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(functionFragment: "supportsInterface", values: [PromiseOrValue<BytesLike>]): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(functionFragment: "tokenURI", values: [PromiseOrValue<BigNumberish>]): string;
@@ -168,6 +180,7 @@ export interface ERC721KV1Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "priceFeed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renounceOwnership", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "royaltyInfo", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "safeTransferFrom(address,address,uint256)", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "safeTransferFrom(address,address,uint256,bytes)", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setApprovalForAll", data: BytesLike): Result;
@@ -175,6 +188,7 @@ export interface ERC721KV1Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setMerkleRoot", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setOnlyAllowlisted", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setTokenRoyalty", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "supportsInterface", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
@@ -317,6 +331,12 @@ export interface ERC721KV1 extends BaseContract {
 
     renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
 
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string, BigNumber]>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -355,6 +375,13 @@ export interface ERC721KV1 extends BaseContract {
 
     setOnlyAllowlisted(
       _state: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setTokenRoyalty(
+      tokenId: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      value: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -440,6 +467,12 @@ export interface ERC721KV1 extends BaseContract {
 
   renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
 
+  royaltyInfo(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    _salePrice: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<[string, BigNumber]>;
+
   "safeTransferFrom(address,address,uint256)"(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
@@ -478,6 +511,13 @@ export interface ERC721KV1 extends BaseContract {
 
   setOnlyAllowlisted(
     _state: PromiseOrValue<boolean>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setTokenRoyalty(
+    tokenId: PromiseOrValue<BigNumberish>,
+    recipient: PromiseOrValue<string>,
+    value: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -557,6 +597,12 @@ export interface ERC721KV1 extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string, BigNumber]>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -585,6 +631,13 @@ export interface ERC721KV1 extends BaseContract {
     setMerkleRoot(_merkleRoot: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<void>;
 
     setOnlyAllowlisted(_state: PromiseOrValue<boolean>, overrides?: CallOverrides): Promise<void>;
+
+    setTokenRoyalty(
+      tokenId: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      value: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     supportsInterface(interfaceId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<boolean>;
 
@@ -713,6 +766,12 @@ export interface ERC721KV1 extends BaseContract {
 
     renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>;
 
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -751,6 +810,13 @@ export interface ERC721KV1 extends BaseContract {
 
     setOnlyAllowlisted(
       _state: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setTokenRoyalty(
+      tokenId: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      value: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -837,6 +903,12 @@ export interface ERC721KV1 extends BaseContract {
 
     renounceOwnership(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<PopulatedTransaction>;
 
+    royaltyInfo(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      _salePrice: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     "safeTransferFrom(address,address,uint256)"(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
@@ -875,6 +947,13 @@ export interface ERC721KV1 extends BaseContract {
 
     setOnlyAllowlisted(
       _state: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setTokenRoyalty(
+      tokenId: PromiseOrValue<BigNumberish>,
+      recipient: PromiseOrValue<string>,
+      value: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

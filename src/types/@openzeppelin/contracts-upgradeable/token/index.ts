@@ -5,7 +5,10 @@
 /* eslint-disable */
 import type * as erc20 from "./ERC20";
 import type * as erc721 from "./ERC721";
+import type * as common from "./common";
 
 export type { erc20 };
 
 export type { erc721 };
+
+export type { common };

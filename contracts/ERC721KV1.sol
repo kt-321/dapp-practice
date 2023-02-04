@@ -6,10 +6,13 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/common/ERC2981Upgradeable.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
-contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
+error RoyaltySetOfNonexistentToken();
+
+contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable, ERC2981Upgradeable{
     string baseURI;
     string public baseExtension;
     bytes32 public merkleRoot;
@@ -32,6 +35,7 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
         __ERC721_init("ERC721K", "ERK");
         // Ownable（generate onlyOwner）
         __Ownable_init();
+        __ERC2981_init();
 
         onlyAllowlisted = false;
         cost = 10000;
@@ -116,5 +120,25 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable{
 
     function setOnlyAllowlisted(bool _state) public onlyOwner {
         onlyAllowlisted = _state;
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(ERC721Upgradeable, ERC2981Upgradeable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function setTokenRoyalty(
+        uint256 tokenId,
+        address recipient,
+        uint96 value
+    ) external {
+        require(_exists(tokenId), "not minted token");
+        // TODO role
+        _setTokenRoyalty(tokenId, recipient, value);
     }
 }

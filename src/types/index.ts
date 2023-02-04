@@ -23,6 +23,8 @@ export type { OwnableUpgradeable } from "./@openzeppelin/contracts-upgradeable/a
 export { OwnableUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable__factory";
 export type { IERC1822ProxiableUpgradeable } from "./@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol/IERC1822ProxiableUpgradeable";
 export { IERC1822ProxiableUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol/IERC1822ProxiableUpgradeable__factory";
+export type { IERC2981Upgradeable } from "./@openzeppelin/contracts-upgradeable/interfaces/IERC2981Upgradeable";
+export { IERC2981Upgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/interfaces/IERC2981Upgradeable__factory";
 export type { IBeaconUpgradeable } from "./@openzeppelin/contracts-upgradeable/proxy/beacon/IBeaconUpgradeable";
 export { IBeaconUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/proxy/beacon/IBeaconUpgradeable__factory";
 export type { ERC1967UpgradeUpgradeable } from "./@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable";
@@ -33,6 +35,8 @@ export type { UUPSUpgradeable } from "./@openzeppelin/contracts-upgradeable/prox
 export { UUPSUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable__factory";
 export type { PausableUpgradeable } from "./@openzeppelin/contracts-upgradeable/security/PausableUpgradeable";
 export { PausableUpgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/security/PausableUpgradeable__factory";
+export type { ERC2981Upgradeable } from "./@openzeppelin/contracts-upgradeable/token/common/ERC2981Upgradeable";
+export { ERC2981Upgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/token/common/ERC2981Upgradeable__factory";
 export type { ERC20Upgradeable } from "./@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable";
 export { ERC20Upgradeable__factory } from "./factories/@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable__factory";
 export type { IERC20MetadataUpgradeable } from "./@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20MetadataUpgradeable";
