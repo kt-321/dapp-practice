@@ -9,8 +9,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable{
+error MintByAddrWithNoMinterRole();
+
+contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable, AccessControl{
     uint256 public _totalSupply = 10000;
     string public _name;
     string public _symbol;
@@ -35,6 +38,9 @@ contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable{
     // Cannot exceed VRFCoordinatorV2.MAX_NUM_WORDS.
     uint32 constant NUM_WORDS = 2;
 
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+
     constructor(address vrfCoordinator_, bytes32 keyHash, uint64 subscriptionId, address priceFeedAddress) ERC20("ERC20K", "ERK") VRFConsumerBaseV2(vrfCoordinator_) {
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator_);
         // ETH / USD
@@ -45,6 +51,10 @@ contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable{
         s_owner = msg.sender;
         s_subscriptionId = subscriptionId;
         _mint(msg.sender, _totalSupply);
+
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(MINTER_ROLE, msg.sender);
+        _setupRole(PAUSER_ROLE, msg.sender);
     }
 
     modifier callerIsUser() {
@@ -52,9 +62,36 @@ contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable{
         _;
     }
 
+    modifier onlyAdmin() {
+        require(isAdmin(msg.sender), "Restricted to Admin");
+        _;
+    }
+
     event ReturnedRandomness(uint256[] randomWords);
 
+    function isAdmin(address account) public virtual view returns (bool){
+        return hasRole(DEFAULT_ADMIN_ROLE, account);
+    }
+
+    function addAdmin(address account) public virtual onlyAdmin {
+        grantRole(DEFAULT_ADMIN_ROLE, account);
+    }
+
+    function renounceAdminRole() public virtual {
+        renounceRole(DEFAULT_ADMIN_ROLE, msg.sender);
+    }
+
+    function addMinter(address account) public virtual onlyAdmin {
+        grantRole(MINTER_ROLE, account);
+    }
+
+    function removeMinter(address account) public virtual onlyAdmin {
+        _revokeRole(MINTER_ROLE, account);
+    }
+
     function mint(address to, uint256 amount) public onlyOwner {
+        if (!hasRole(MINTER_ROLE, msg.sender))
+            revert MintByAddrWithNoMinterRole();
         _mint(to, amount);
     }
 
