@@ -1,6 +1,7 @@
 // import { loadFixture } from "ethereum-waffle";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
+import { BigNumber } from "ethers";
 import { ethers, upgrades } from "hardhat";
 import { keccak256 } from "keccak256";
 import { MerkleTree } from "merkletreejs";
@@ -276,6 +277,47 @@ describe("ERC721KV1", () => {
       // console.log("contract.balanceOf(user2.address):", await contract.balanceOf(user2.address))
 
       // expect(await contract.balanceOf(user2.address)).to.equal(1)
+    });
+  });
+
+  describe("withdraw", function () {
+    it("msg.sender is owner", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+
+      const provider = ethers.provider;
+
+      const balanceAdmin0 = await provider.getBalance(admin.address);
+      console.log("balanceAdmin0:", ethers.utils.formatEther(balanceAdmin0));
+      const balanceContract0 = await provider.getBalance(contract.address);
+      console.log("balanceContract0:", ethers.utils.formatEther(balanceContract0));
+
+      // mint and pay 1 eth
+      await connectedUser1
+        .mint(0, [], {
+          value: ethers.utils.parseEther("1"),
+        })
+        .then(() => console.log("successed mint"))
+        .catch((err) => {
+          console.log("failed mint:"), err;
+        });
+
+      const balanceAdmin1 = await provider.getBalance(admin.address);
+      console.log("balanceAdmin1:", ethers.utils.formatEther(balanceAdmin1));
+      const balanceContract1 = await provider.getBalance(contract.address);
+      console.log("balanceContract1:", ethers.utils.formatEther(balanceContract1));
+
+      // withdraw
+      await connectedAdmin.withdraw();
+
+      const balanceContract2 = await provider.getBalance(contract.address);
+      const balanceAdmin2 = await provider.getBalance(admin.address);
+      console.log("balanceContract2:", ethers.utils.formatEther(balanceContract2));
+      console.log("balanceAdmin2:", ethers.utils.formatEther(balanceAdmin2));
+
+      expect(balanceContract2).to.equal(BigNumber.from("0"));
     });
   });
 });

@@ -58,6 +58,7 @@ export interface ERC721KV2Interface extends utils.Interface {
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "userMintedAmount(address)": FunctionFragment;
+    "withdraw()": FunctionFragment;
   };
 
   getFunction(
@@ -97,6 +98,7 @@ export interface ERC721KV2Interface extends utils.Interface {
       | "transferFrom"
       | "transferOwnership"
       | "userMintedAmount"
+      | "withdraw"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -164,6 +166,7 @@ export interface ERC721KV2Interface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "transferOwnership", values: [PromiseOrValue<string>]): string;
   encodeFunctionData(functionFragment: "userMintedAmount", values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -200,6 +203,7 @@ export interface ERC721KV2Interface extends utils.Interface {
   decodeFunctionResult(functionFragment: "transferFrom", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "transferOwnership", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "userMintedAmount", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -417,6 +421,8 @@ export interface ERC721KV2 extends BaseContract {
     ): Promise<ContractTransaction>;
 
     userMintedAmount(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    withdraw(overrides?: PayableOverrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
   };
 
   approve(
@@ -556,6 +562,8 @@ export interface ERC721KV2 extends BaseContract {
 
   userMintedAmount(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
 
+  withdraw(overrides?: PayableOverrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
+
   callStatic: {
     approve(
       to: PromiseOrValue<string>,
@@ -672,6 +680,8 @@ export interface ERC721KV2 extends BaseContract {
     transferOwnership(newOwner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
 
     userMintedAmount(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdraw(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -858,6 +868,8 @@ export interface ERC721KV2 extends BaseContract {
     ): Promise<BigNumber>;
 
     userMintedAmount(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+
+    withdraw(overrides?: PayableOverrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -997,5 +1009,7 @@ export interface ERC721KV2 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     userMintedAmount(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdraw(overrides?: PayableOverrides & { from?: PromiseOrValue<string> }): Promise<PopulatedTransaction>;
   };
 }
