@@ -125,6 +125,39 @@ describe("ERC721KV1", () => {
       expect(await contract.balanceOf(user1.address)).to.be.equal(1);
       expect(await contract.ownerOf(1)).to.be.equal(user1.address);
     });
+    it("Should emit event", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+      await connectedAdmin.setOnlyAllowlisted(true);
+
+      // allow user1 to mint 5 tokens
+      await connectedAdmin
+        .setMerkleRoot("0x81153aa1dd3241905eabdd87dfedf6b5f99983cc923512307c025520a7b51cf2")
+        .then(() => {
+          console.log("successed setMerkleRoot");
+        })
+        .catch((err) => {
+          console.log("failed setMerkleRoot:", err);
+        });
+
+      const claimingAddress = ethers.utils.solidityKeccak256(["address", "uint256"], [user1.address, 5]);
+
+      console.log("+++claimingAddress:", claimingAddress);
+
+      const leafNodes = [claimingAddress];
+      const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+      const hexProof = merkleTree.getHexProof(claimingAddress);
+
+      await expect(
+        connectedUser1.mint(5, hexProof, {
+          value: ethers.utils.parseEther("0.01"),
+        })
+      )
+        .to.emit(contract, "Transfer")
+        .withArgs(ethers.constants.AddressZero, user1.address, 1);
+    });
   });
 
   describe("tokenURI", function () {
@@ -150,9 +183,7 @@ describe("ERC721KV1", () => {
     it("Should transfer tokens between accounts", async function () {
       const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
 
-      const connectedAdmin = ERC721KV1__factory.connect(contract.address, admin);
       const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
-      const connectedUser2 = ERC721KV1__factory.connect(contract.address, user2);
 
       await connectedUser1
         .mint(5, [], {
@@ -169,6 +200,24 @@ describe("ERC721KV1", () => {
         .catch((err) => {
           console.log("failed transfer:"), err;
         });
+    });
+    it("Should emit event", async function () {
+      const { admin, user1, user2, user3, contract } = await loadFixture(deployFixture);
+
+      const connectedUser1 = ERC721KV1__factory.connect(contract.address, user1);
+
+      await connectedUser1
+        .mint(5, [], {
+          value: ethers.utils.parseEther("0.01"),
+        })
+        .then(() => console.log("successed mint"))
+        .catch((err) => {
+          console.log("failed mint:"), err;
+        });
+
+      await expect(connectedUser1.transfer(user1.address, user2.address, 1))
+        .to.emit(contract, "Transfer")
+        .withArgs(user1.address, user2.address, 1);
     });
   });
 
