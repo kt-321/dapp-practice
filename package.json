@@ -39,6 +39,7 @@
     "chai": "^4.3.7",
     "daisyui": "2.46.0",
     "dotenv": "^16.0.3",
+    "erc721a": "^4.2.3",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.7.2",
     "hardhat": "^2.12.4",
