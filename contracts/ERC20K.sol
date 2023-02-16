@@ -67,6 +67,11 @@ contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable, AccessControl{
         _;
     }
 
+    modifier onlyMinter() {
+        require(isMinter(msg.sender), "Restricted to Minter");
+        _;
+    }
+
     event ReturnedRandomness(uint256[] randomWords);
 
     function isAdmin(address account) public virtual view returns (bool){
@@ -81,6 +86,10 @@ contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable, AccessControl{
         renounceRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
+    function isMinter(address account) public virtual view returns (bool){
+        return hasRole(MINTER_ROLE, account);
+    }
+
     function addMinter(address account) public virtual onlyAdmin {
         grantRole(MINTER_ROLE, account);
     }
@@ -89,13 +98,13 @@ contract ERC20K is ERC20, VRFConsumerBaseV2, Ownable, AccessControl{
         _revokeRole(MINTER_ROLE, account);
     }
 
-    function mint(address to, uint256 amount) public onlyOwner {
+    function mint(address to, uint256 amount) public onlyMinter {
         if (!hasRole(MINTER_ROLE, msg.sender))
             revert MintByAddrWithNoMinterRole();
         _mint(to, amount);
     }
 
-    function transfer(address from, address to, uint256 amount) public onlyOwner {
+    function transfer(address from, address to, uint256 amount) public onlyMinter {
         _transfer(from, to, amount);
     }
 
