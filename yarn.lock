@@ -11878,7 +11878,7 @@ solc@^0.6.3:
     semver "^5.5.0"
     tmp "0.0.33"
 
-solgraph@1.0.2:
+solgraph@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/solgraph/-/solgraph-1.0.2.tgz#554b0dfff68b60bd3dee75f600d5578fcb427985"
   integrity sha512-jSml2xRdGcD4NGVX2okXPVtqFOlduCg1Zs+JCZYEiVXeYWvCfn65PjCvt+BG3dfW7gWaRzqDa5mqf3lhaFflxw==
