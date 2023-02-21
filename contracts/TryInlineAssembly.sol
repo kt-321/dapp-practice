@@ -62,7 +62,7 @@ contract TryInlineAssembly {
             // return (empty, 32) // return 32 bytes from memory address 0x0
         }
         emit LogUint(res1);
-        emit LogUint(res2);
+        emit LogUint(res2); // 16
         return res2;
     }
 
@@ -75,4 +75,34 @@ contract TryInlineAssembly {
             return x + y;
         }
     }
+
+    function useCalldata () public {
+        uint size = 0;
+        uint num = 0;
+        assembly {
+            size := calldatasize()
+            let ptr := mload(0x40)
+            calldatacopy(ptr, 0, 4) // calldataの先頭から長さ4バイトのデータが、メモリ上のptrアドレスにコピー
+            num := mload(ptr)
+        }
+        emit LogUint(size);
+        emit LogUint(num);
+    }
+
+    function testCalldata (uint256[] calldata input) public pure returns (uint256[] calldata) {
+        // calldata is immutable
+        return input;
+    }
+
+    function testMemory (uint256[] memory input) public pure returns (uint256[] memory) {
+        // calldata is mutable
+        uint256[] memory nums = new uint256[](2);
+        nums[0] = 5;
+        nums[1] = 10;
+
+        input[0] = nums[1];
+        return input;
+    }
 }
+
+
