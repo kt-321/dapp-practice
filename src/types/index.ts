@@ -6,12 +6,15 @@
 import type * as chainlink from "./@chainlink";
 import type * as openzeppelin from "./@openzeppelin";
 import type * as contracts from "./contracts";
+import type * as erc721A from "./erc721a";
 
 export type { chainlink };
 
 export type { openzeppelin };
 
 export type { contracts };
+
+export type { erc721A };
 export * as factories from "./factories";
 export type { AggregatorV3Interface } from "./@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface";
 export { AggregatorV3Interface__factory } from "./factories/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface__factory";
@@ -91,6 +94,8 @@ export type { BoxV2 } from "./contracts/BoxV2";
 export { BoxV2__factory } from "./factories/contracts/BoxV2__factory";
 export type { ERC20K } from "./contracts/ERC20K";
 export { ERC20K__factory } from "./factories/contracts/ERC20K__factory";
+export type { ERC721dyn } from "./contracts/ERC721dyn";
+export { ERC721dyn__factory } from "./factories/contracts/ERC721dyn__factory";
 export type { ERC721K } from "./contracts/ERC721K";
 export { ERC721K__factory } from "./factories/contracts/ERC721K__factory";
 export type { ERC721KV1 } from "./contracts/ERC721KV1";
@@ -103,3 +108,9 @@ export type { ITManToken } from "./contracts/ITManToken";
 export { ITManToken__factory } from "./factories/contracts/ITManToken__factory";
 export type { TryInlineAssembly } from "./contracts/TryInlineAssembly";
 export { TryInlineAssembly__factory } from "./factories/contracts/TryInlineAssembly__factory";
+export type { ERC721A__IERC721Receiver } from "./erc721a/contracts/ERC721A.sol/ERC721A__IERC721Receiver";
+export { ERC721A__IERC721Receiver__factory } from "./factories/erc721a/contracts/ERC721A.sol/ERC721A__IERC721Receiver__factory";
+export type { ERC721A } from "./erc721a/contracts/ERC721A.sol/ERC721A";
+export { ERC721A__factory } from "./factories/erc721a/contracts/ERC721A.sol/ERC721A__factory";
+export type { IERC721A } from "./erc721a/contracts/IERC721A";
+export { IERC721A__factory } from "./factories/erc721a/contracts/IERC721A__factory";

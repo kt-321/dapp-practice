@@ -7,6 +7,7 @@ export { ERC20K__factory } from "./ERC20K__factory";
 export { ERC721K__factory } from "./ERC721K__factory";
 export { ERC721KV1__factory } from "./ERC721KV1__factory";
 export { ERC721KV2__factory } from "./ERC721KV2__factory";
+export { ERC721dyn__factory } from "./ERC721dyn__factory";
 export { Greeter__factory } from "./Greeter__factory";
 export { ITManToken__factory } from "./ITManToken__factory";
 export { TryInlineAssembly__factory } from "./TryInlineAssembly__factory";

@@ -7,6 +7,7 @@ export type { ERC20K } from "./ERC20K";
 export type { ERC721K } from "./ERC721K";
 export type { ERC721KV1 } from "./ERC721KV1";
 export type { ERC721KV2 } from "./ERC721KV2";
+export type { ERC721dyn } from "./ERC721dyn";
 export type { Greeter } from "./Greeter";
 export type { ITManToken } from "./ITManToken";
 export type { TryInlineAssembly } from "./TryInlineAssembly";

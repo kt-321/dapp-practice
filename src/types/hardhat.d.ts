@@ -164,6 +164,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20K__factory>;
     getContractFactory(
+      name: "ERC721dyn",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721dyn__factory>;
+    getContractFactory(
       name: "ERC721K",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC721K__factory>;
@@ -187,6 +191,18 @@ declare module "hardhat/types/runtime" {
       name: "TryInlineAssembly",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.TryInlineAssembly__factory>;
+    getContractFactory(
+      name: "ERC721A__IERC721Receiver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721A__IERC721Receiver__factory>;
+    getContractFactory(
+      name: "ERC721A",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721A__factory>;
+    getContractFactory(
+      name: "IERC721A",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721A__factory>;
 
     getContractAt(
       name: "AggregatorV3Interface",
@@ -311,6 +327,7 @@ declare module "hardhat/types/runtime" {
     getContractAt(name: "Box", address: string, signer?: ethers.Signer): Promise<Contracts.Box>;
     getContractAt(name: "BoxV2", address: string, signer?: ethers.Signer): Promise<Contracts.BoxV2>;
     getContractAt(name: "ERC20K", address: string, signer?: ethers.Signer): Promise<Contracts.ERC20K>;
+    getContractAt(name: "ERC721dyn", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721dyn>;
     getContractAt(name: "ERC721K", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721K>;
     getContractAt(name: "ERC721KV1", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721KV1>;
     getContractAt(name: "ERC721KV2", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721KV2>;
@@ -321,6 +338,13 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.TryInlineAssembly>;
+    getContractAt(
+      name: "ERC721A__IERC721Receiver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721A__IERC721Receiver>;
+    getContractAt(name: "ERC721A", address: string, signer?: ethers.Signer): Promise<Contracts.ERC721A>;
+    getContractAt(name: "IERC721A", address: string, signer?: ethers.Signer): Promise<Contracts.IERC721A>;
 
     // default types
     getContractFactory(name: string, signerOrOptions?: ethers.Signer | FactoryOptions): Promise<ethers.ContractFactory>;

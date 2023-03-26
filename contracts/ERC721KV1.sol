@@ -143,7 +143,6 @@ contract ERC721KV1 is ERC721Upgradeable, OwnableUpgradeable, ERC2981Upgradeable{
     }
 
     function withdraw() public payable onlyOwner {
-        console.log("withdraw balance:", address(this).balance);
         (bool success, ) = payable(msg.sender).call{value: address(this).balance}("");
         require(success);
     }

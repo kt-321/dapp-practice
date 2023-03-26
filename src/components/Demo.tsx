@@ -14,7 +14,7 @@ import { allowlistAddresses } from "../../allowlist.mjs";
 import { injected, walletconnect, POLLING_INTERVAL } from "../dapp/connectors";
 import { useEagerConnect, useInactiveListener } from "../dapp/hooks";
 import logger from "../logger";
-import { ERC721KV2__factory } from "../types";
+import { ERC721KV1__factory, ERC721KV2__factory } from "../types";
 import { Header } from "./Header";
 
 function getErrorMessage(error: Error) {
@@ -48,6 +48,31 @@ export const Demo = function () {
       setActivatingConnector(undefined);
     }
   }, [activatingConnector, connector]);
+
+  const msgCatch = (_from, _msg) => {
+    console.log("from: ", _from);
+    console.log("message: ", _msg);
+  };
+
+  useEffect(() => {
+    const msgCatch = (_from, _msg) => {
+      console.log("from: ", _from);
+      console.log("message: ", _msg);
+    };
+
+    // const provider = new ethers.providers.Web3Provider(account);
+    // const signer = provider.getSigner();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const signer = provider.getSigner();
+
+    // getLibrary(window.eth)
+    console.log("library:", library);
+
+    // const signer = library.getSigner(account)
+    // const contract = new ethers.Contract(address, ERC721KV1__factory.abi, signer);
+    // const filter = contract.filters.Transfer(null,null);
+    // contract.on(filter, msgCatch);
+  }, []);
 
   // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
   const triedEager = useEagerConnect();
@@ -183,17 +208,57 @@ export const Demo = function () {
                         console.log("txRequest:", txRequest);
                         console.log("txRequest.data:", txRequest.data);
 
-                        await library
-                          .getSigner(account)
-                          .sendTransaction(txRequest)
-                          .then((res) => {
-                            window.alert("Minted!");
-                            console.log("hash:", res.hash);
-                          })
-                          .catch((err) => {
-                            window.alert(`err:${err}`);
-                            console.log("err:", err);
-                          });
+                        // await library
+                        //   .getSigner(account)
+                        //   .sendTransaction(txRequest)
+                        //   .then((res) => {
+                        //     window.alert("Minted!");
+                        //     console.log("res:", res);
+                        //     console.log("res.hash:", res.hash);
+
+                        //     const signer = library.getSigner(account)
+                        //     const contract = new ethers.Contract(address, ERC721KV1__factory.abi, library);
+                        //     // const filter = contract.filters.Transfer(null,null);
+                        //     // contract.on(filter, msgCatch);
+
+                        //     contract.on("Transfer", (from, to, value, event)=>{
+                        //     const transferEvent ={
+                        //         from: from,
+                        //         to: to,
+                        //         value: value,
+                        //         eventData: event,
+                        //     }
+                        //     console.log(JSON.stringify(transferEvent, null, 4))
+                        //   })
+                        //   })
+                        //   .catch((err) => {
+                        //     window.alert(`err:${err}`);
+                        //     console.log("err:", err);
+                        //   });
+
+                        // const contract = await ERC721KV1__factory.attach(address)
+
+                        const tx = await library.getSigner(account).sendTransaction(txRequest);
+
+                        const receipt = await tx.wait();
+
+                        console.log("tx:", tx);
+                        console.log("receipt:", receipt);
+                        console.log("receipt.logs:", receipt.logs);
+                        console.log("receipt.logs:", receipt.logs);
+
+                        const contract = new ethers.Contract(address, ERC721KV1__factory.abi, library);
+
+                        console.log("contract:", contract);
+                        contract.on("Transfer", (from, to, value, event) => {
+                          const transferEvent = {
+                            from: from,
+                            to: to,
+                            value: value,
+                            eventData: event,
+                          };
+                          console.log(JSON.stringify(transferEvent, null, 4));
+                        });
                       }}
                     >
                       Mint

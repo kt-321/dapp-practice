@@ -6,6 +6,7 @@ contract TryInlineAssembly {
     constructor() {}
 
     event LogUint(uint256 num);
+    event LogStr(string str);
 
     function useStorage2() public returns (uint256 v1, uint256 v2, uint256 v3){
         assembly {
@@ -63,7 +64,7 @@ contract TryInlineAssembly {
         }
         emit LogUint(res1);
         emit LogUint(res2); // 16
-        return res2;
+        return res1;
     }
 
     function uncheck(
@@ -76,7 +77,7 @@ contract TryInlineAssembly {
         }
     }
 
-    function useCalldata () public {
+    function useCalldata () public pure returns (uint256, uint256){
         uint size = 0;
         uint num = 0;
         assembly {
@@ -85,8 +86,8 @@ contract TryInlineAssembly {
             calldatacopy(ptr, 0, 4) // calldataの先頭から長さ4バイトのデータが、メモリ上のptrアドレスにコピー
             num := mload(ptr)
         }
-        emit LogUint(size);
-        emit LogUint(num);
+
+        return (size, num);
     }
 
     function testCalldata (uint256[] calldata input) public pure returns (uint256[] calldata) {

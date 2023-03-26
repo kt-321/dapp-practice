@@ -41,6 +41,7 @@ export interface ERC20KInterface extends utils.Interface {
     "hasRole(bytes32,address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "isAdmin(address)": FunctionFragment;
+    "isMinter(address)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -84,6 +85,7 @@ export interface ERC20KInterface extends utils.Interface {
       | "hasRole"
       | "increaseAllowance"
       | "isAdmin"
+      | "isMinter"
       | "mint"
       | "name"
       | "owner"
@@ -137,6 +139,7 @@ export interface ERC20KInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "isAdmin", values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: "isMinter", values: [PromiseOrValue<string>]): string;
   encodeFunctionData(functionFragment: "mint", values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -195,6 +198,7 @@ export interface ERC20KInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "increaseAllowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isAdmin", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isMinter", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -386,6 +390,8 @@ export interface ERC20K extends BaseContract {
 
     isAdmin(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[boolean]>;
 
+    isMinter(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[boolean]>;
+
     mint(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -531,6 +537,8 @@ export interface ERC20K extends BaseContract {
 
   isAdmin(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
 
+  isMinter(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+
   mint(
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
@@ -669,6 +677,8 @@ export interface ERC20K extends BaseContract {
     ): Promise<boolean>;
 
     isAdmin(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+
+    isMinter(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
 
     mint(to: PromiseOrValue<string>, amount: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<void>;
 
@@ -875,6 +885,8 @@ export interface ERC20K extends BaseContract {
 
     isAdmin(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
 
+    isMinter(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+
     mint(
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
@@ -1020,6 +1032,8 @@ export interface ERC20K extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     isAdmin(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    isMinter(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     mint(
       to: PromiseOrValue<string>,
